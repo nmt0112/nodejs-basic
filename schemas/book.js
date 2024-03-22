@@ -9,8 +9,7 @@ var bookSchema = new mongoose.Schema({
     price: Number,
     author: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'author',
-        require: true
+        ref: 'author'
     },
     isDelete: {
         type: Boolean,
@@ -19,4 +18,3 @@ var bookSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 module.exports = new mongoose.model('book', bookSchema)
-//tao bang books trong db

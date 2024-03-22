@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var responseReturn = require('../helper/ResponseHandle');
-const author = require('../schemas/author');
 var authorModel = require('../schemas/author');
 
 router.get('/', async function (req, res, next) {
@@ -20,7 +19,9 @@ router.get('/', async function (req, res, next) {
         .find(queries)
         .skip(limit * (page - 1))
         .sort(sort)
-        .limit(limit).exec();
+        .limit(limit)
+        .populate('published')
+        .exec();
     responseReturn.ResponseSend(res, true, 200, authors)
 });
 
@@ -36,9 +37,7 @@ router.get('/:id', async function (req, res, next) {
 router.post('/', async function (req, res, next) {
     try {
         var newauthor = new authorModel({
-            name: req.body.name,
-            price: req.body.price,
-            author: req.body.author
+            name: req.body.name
         })
         await newauthor.save();
         responseReturn.ResponseSend(res, true, 200, newauthor)
