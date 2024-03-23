@@ -9,8 +9,8 @@ router.get('/', function (req, res, next) {
 //hostname:port/users
 router.use('/users', require('./users'));
 //hostname:port/api/v1/books
-router.use('/api/v1/books', require('./books'));
+router.use('/books', require('./books'));
 //hostname:port/api/v1/authors
-router.use('/api/v1/authors', require('./authors'));
+router.use('/authors', require('./authors'));
 
 module.exports = router;

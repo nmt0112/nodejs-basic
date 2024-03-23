@@ -5,14 +5,19 @@ var authorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    published: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'book'
-    }],
     isDelete: {
         type: Boolean,
         default: false
     }
-}, { timestamps: true });
+}, { timestamps: true })
+
+authorSchema.virtual('published', {
+    ref: 'book',
+    foreignField: 'author',
+    localField: '_id'
+})
+
+authorSchema.set('toObject', { virtuals: true })
+authorSchema.set('toJSON', { virtuals: true })
 
 module.exports = new mongoose.model('author', authorSchema)

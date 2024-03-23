@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var responseReturn = require('../helper/ResponseHandle');
-const book = require('../schemas/book');
-const author = require('../schemas/author');
 var bookModel = require('../schemas/book');
 var authorModel = require('../schemas/author');
 
@@ -21,7 +19,8 @@ router.get('/', async function (req, res, next) {
     var books = await bookModel
         .find(queries)
         .skip(limit * (page - 1))
-        .sort(sort).limit(limit)
+        .sort(sort)
+        .limit(limit)
         .exec();
     responseReturn.ResponseSend(res, true, 200, books)
 });
