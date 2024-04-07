@@ -21,7 +21,7 @@ var indexRouter = require('./routes/index')
 app.use('/', indexRouter);
 
 //conect mongoose
-mongoose.connect("mongodb://127.0.0.1:27017/store")
+mongoose.connect("mongodb://127.0.0.1:27017/cosmetics")
   .then(function () {
     console.log("connected");
   }).catch(function (err) {

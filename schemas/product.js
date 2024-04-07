@@ -1,15 +1,22 @@
 var mongoose = require('mongoose');
 
-var bookSchema = new mongoose.Schema({
+var productSchema = new mongoose.Schema({
     name: {
         type: String,
         unique: true,
         required: true
     },
     price: Number,
-    author: {
+    description: {
+        type: String
+    },
+    brand: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'author'
+        ref: 'brand'
+    },
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'category'
     },
     isDelete: {
         type: Boolean,
@@ -17,4 +24,4 @@ var bookSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-module.exports = new mongoose.model('book', bookSchema)
+module.exports = new mongoose.model('product', productSchema)

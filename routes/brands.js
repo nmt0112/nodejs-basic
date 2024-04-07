@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var responseReturn = require('../helper/ResponseHandle');
-var authorModel = require('../schemas/author');
+var brandModel = require('../schemas/brand');
 
 router.get('/', async function (req, res, next) {
     var queries = {};
@@ -15,20 +15,23 @@ router.get('/', async function (req, res, next) {
     var page = req.query.page ? req.query.page : 1;
     var limit = req.query.limit ? req.query.limit : 5;
     var sort = req.query.sort ? req.query.sort : {}
-    var authors = await authorModel
+    var brands = await brandModel
         .find(queries)
         .skip(limit * (page - 1))
         .sort(sort)
         .limit(limit)
         .populate('published')
         .exec();
-    responseReturn.ResponseSend(res, true, 200, authors)
+    responseReturn.ResponseSend(res, true, 200, brands)
 });
 
 router.get('/:id', async function (req, res, next) {
     try {
-        let author = await authorModel.find({ _id: req.params.id });
-        responseReturn.ResponseSend(res, true, 200, author)
+        let brand = await brandModel.find({ _id: req.params.id }).populate({
+            path: 'published',
+            select: '-isDelete -createdAt -updatedAt'
+        });
+        responseReturn.ResponseSend(res, true, 200, brand)
     } catch (error) {
         responseReturn.ResponseSend(res, false, 404, error)
     }
@@ -36,11 +39,11 @@ router.get('/:id', async function (req, res, next) {
 
 router.post('/', async function (req, res, next) {
     try {
-        var newauthor = new authorModel({
+        var newbrand = new brandModel({
             name: req.body.name
         })
-        await newauthor.save();
-        responseReturn.ResponseSend(res, true, 200, newauthor)
+        await newbrand.save();
+        responseReturn.ResponseSend(res, true, 200, newbrand)
     } catch (error) {
         responseReturn.ResponseSend(res, true, 404, error)
     }
@@ -48,23 +51,23 @@ router.post('/', async function (req, res, next) {
 
 router.put('/:id', async function (req, res, next) {
     try {
-        let author = await authorModel.findByIdAndUpdate(req.params.id, req.body,
+        let brand = await brandModel.findByIdAndUpdate(req.params.id, req.body,
             {
                 new: true
             });
-        responseReturn.ResponseSend(res, true, 200, author)
+        responseReturn.ResponseSend(res, true, 200, brand)
     } catch (error) {
         responseReturn.ResponseSend(res, true, 404, error)
     }
 })
 router.delete('/:id', async function (req, res, next) {
     try {
-        let author = await authorModel.findByIdAndUpdate(req.params.id, {
+        let brand = await brandModel.findByIdAndUpdate(req.params.id, {
             isDelete: true
         }, {
             new: true
         });
-        responseReturn.ResponseSend(res, true, 200, author)
+        responseReturn.ResponseSend(res, true, 200, brand)
     } catch (error) {
         responseReturn.ResponseSend(res, true, 404, error)
     }

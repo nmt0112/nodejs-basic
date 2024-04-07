@@ -6,11 +6,11 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-//hostname:port/users
-router.use('/users', require('./users'));
-//hostname:port/api/v1/books
-router.use('/books', require('./books'));
-//hostname:port/api/v1/authors
-router.use('/authors', require('./authors'));
+//hostname:port/api/v1/brands
+router.use('/api/v1/brands', require('./brands'));
+//hostname:port/api/v1/categoriess
+router.use('/api/v1/categories', require('./categories'));
+//hostname:port/api/v1/categoriess
+router.use('/api/v1/products', require('./products'));
 
 module.exports = router;
