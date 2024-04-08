@@ -1,34 +1,44 @@
-var mongoose = require('mongoose');
-var bcrypt = require('bcrypt')
+var mongoose = require("mongoose");
+var bcrypt = require("bcrypt");
+var jwt = require('jsonwebtoken')
+var configs = require('../configs/config')
+var crypto = require('crypto');
 
 var userSchema = new mongoose.Schema({
     username: {
         type: String,
-        unique: true,
-        required: true
+        unique: true
     },
-    password: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true
+    password: String,
+    role: {
+        type: [String],
+        default: ["USER"]
     },
     status: {
         type: Boolean,
-        default: false
+        default: true
     },
-    role: {
-        type: [String],
-        require: true,
-        default: "USER"
-    }
-
-}, { timestamps: true });
+    email: String,
+    ResetPasswordToken: String,
+    ResetPasswordExp: String
+}, { timestamps: true })
 
 userSchema.pre('save', function () {
-    this.password = bcrypt.hashSync(this.password, 10)
+    if (this.isModified('password')) {
+        this.password = bcrypt.hashSync(this.password, 10);
+    }
 })
 
-module.exports = new mongoose.model('user', userSchema)
+userSchema.methods.getJWT = function () {
+    var token = jwt.sign({ id: this._id }, configs.SECRET_KEY, {
+        expiresIn: configs.EXP_JWT
+    });
+    return token;
+}
+userSchema.methods.genTokenResetPassword = function () {
+    this.ResetPasswordToken = crypto.randomBytes(30).toString('hex');
+    this.ResetPasswordExp = Date.now() + 60 * 1000 * 10;
+    return this.ResetPasswordToken;
+}
+
+module.exports = new mongoose.model('user', userSchema);
