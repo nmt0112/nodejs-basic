@@ -3,7 +3,7 @@ var util = require('node:util');
 
 var options = {
     username: {
-        min: 8,
+        min: 5,
         max: 42
     },
     password: {

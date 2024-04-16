@@ -16,7 +16,7 @@ var userSchema = new mongoose.Schema({
     },
     status: {
         type: Boolean,
-        default: true
+        default: false
     },
     email: String,
     ResetPasswordToken: String,
